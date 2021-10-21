@@ -17,6 +17,13 @@ COLUMNS = [
     'expiry_date'
 ]
 
+COLUMNS2 = [
+    'ship_type',
+    'count',
+    'min',
+    'avg',
+    'max'
+]
 
 def index(request):
     """Shows the main page"""
