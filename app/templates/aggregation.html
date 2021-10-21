@@ -11,13 +11,15 @@
   <div class="table-responsive">
     <table class="table table-hover table-striped">
       <thead>
-        <tr>
+	   
+       <tr>
           <th class="ordering" onclick="window.location='/aggregation/?order_by=ship_type'">Ship Type</th>
-          <th class="ordering" onclick="window.location='/aggregation/?order_by=count'">Count</th>
-		  <th class="ordering" onclick="window.location='/aggregation/?order_by=min'">Minimum EEDI</th>
-		  <th class="ordering" onclick="window.location='/aggregation/?order_by=avg'">Maximum EEDI</th>
-		  <th class="ordering" onclick="window.location='/aggregation/?order_by=max">Average EEDI</th>
-		</tr>
+          <th class="ordering" onclick="window.location='/aggregation/?order_by=number_ships'">Number Ships</th>
+          <th class="ordering" onclick="window.location='/aggregation/?order_by=minimum_eedi'">Minimum EEDI</th>
+          <th class="ordering" onclick="window.location='/aggregation/?order_by=average_eedi'">Average EEDI</th>
+          <th class="ordering" onclick="window.location='/aggregation/?order_by=maximum_eedi'">Maximum EEDI</th>
+        </tr>
+	      
       </thead>
       {% for row in rows %}
         <tr style="cursor:pointer;" onclick="window.location='/aggregate/imo/{{ row.imo }}'">
