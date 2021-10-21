@@ -9,9 +9,12 @@ from app.forms import ImoForm
 
 PAGE_SIZE = 20
 COLUMNS = [
-    'imo',
+     'imo',
     'ship_name',
-    'technical_efficiency_number'
+    'ship_type',
+    'technical_efficiency_number',
+    'issue_date',
+    'expiry_date'
 ]
 
 
