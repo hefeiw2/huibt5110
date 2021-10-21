@@ -4,16 +4,20 @@
 
 {% block content %}
 <div class="container" style="padding-bottom: 50px;">
-  <h2>Visual</h2>
-  {% if msg %}
-    <span class="text-success h4">{{ msg }}</span>
-  {% endif %}
+	<h2>Ship count</h2>
+	<div id="container" style="width: 75%;">
+	  <canvas id="pie-chart"></canvas>
+	</div>
+	<div id="container" style="width: 75%;">
+	  <canvas id="bar-chart"></canvas>
+	</div>
+	<h2>EEDI</h2>
+	<div id="container" style="width: 75%;">
+	  <canvas id="min-max-chart"></canvas>
+	</div>
+
 </div>
 
-
-<div id="container" style="width: 75%;">
-  <canvas id="pie-chart"></canvas>
-</div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
 <script>
@@ -22,21 +26,121 @@
       type: 'pie',
       data: {
         datasets: [{
-          data: {{ data|safe }},
-          backgroundColor: ["#003300","#336600", "#339933", "#33FF66","#99FF66", "#669966", "#66FF66", "#B10DC9", "#FFDC00",  "#39CCCC", "#01FF70",  "#F012BE", "#3D9970", "#111111", "#AAAAAA"],
-		  
-          label: 'ship_type'
+          data: {{count|safe}},	  
+          label: 'Count',
+		  backgroundColor: ["#003300","#336600", "#339933", "#33FF66","#99FF66", "#669966", "#66FF66", "#B10DC9", "#FFDC00",  "#39CCCC", "#01FF70",  "#F012BE", "#3D9970", "#111111", "#AAAAAA"],
         }],
-        labels: {{ labels|safe }}
+        labels: {{labels|safe}}
       },
       options: {
         responsive: true
       }
     };
+	
+	var config2 = {
+      type: 'bar',
+      data: {
+        datasets: [
+		{
+          data: {{count|safe}},
+          label: 'Count',
+		  backgroundColor: ["#003300","#336600", "#339933", "#33FF66","#99FF66", "#669966", "#66FF66", "#B10DC9", "#FFDC00",  "#39CCCC", "#01FF70",  "#F012BE", "#3D9970", "#111111", "#AAAAAA"],
+        }
+		],
+        labels: {{labels|safe}}
+      },
+      options: {
+        responsive: true
+      }
+    };
+	
+	var config3 = {
+      type: 'bar',
+      data: {
+        datasets: [
+		  {
+			data: {{min_avg|safe}},
+			label: 'Minimum EEDI to Average EEDI',
+			backgroundColor: "rgba(240, 140, 121, 1.0)",
 
+		  },
+		  {
+			data: {{avg_max|safe}},
+			label: 'Average EEDI to Maximum EEDI',
+			backgroundColor: "rgba(121, 200, 121, 0.8)",
+
+		  }	  
+		],
+        labels: {{labels|safe}}
+      },
+      options: {
+        responsive: true
+      }
+    };
+	
+	
+	
+/*
+	var config3 = {
+	  type: "bar",
+	  data: {
+		labels: [
+		  newDateString(0),
+		  newDateString(1),
+		  newDateString(2),
+		  newDateString(3),
+		  newDateString(4),
+		  newDateString(5),
+		  newDateString(6)
+		], // Date Objects
+		datasets: [
+		  {
+			label: "min",
+			backgroundColor: "rgba(240, 140, 121, 1.0)",
+			borderColor: "rgba(140, 140, 140, 0.0)",
+			borderWidth: 0,
+			data: [
+			  [10,12],
+			  [20,25],
+			  [15,25],
+			  [25,28],
+			  [40,41],
+			  [35,42],
+			  [32,34],
+			],
+			fill: "-1",
+			radius: 0,
+		  },
+		  {
+			label: "max",
+			backgroundColor: "rgba(121, 200, 121, 0.8)",
+			borderColor: "rgba(140, 140, 140, 0.0)",
+			borderWidth: 0,
+			data: [
+			  [12,18],
+			  [25,28],
+			  [25,35],
+			  [28,29],
+			  [41,51],
+			  [42,55],
+			  [34,43]
+			],
+			fill: "-1",
+			line: false,
+			radius: 0,
+		  }
+		]
+	  }
+	};
+	
+*/
     window.onload = function() {
       var ctx = document.getElementById('pie-chart').getContext('2d');
       window.myPie = new Chart(ctx, config);
+	  var ctx = document.getElementById('bar-chart').getContext('2d');
+      window.myBar = new Chart(ctx, config2);
+	  var ctx = document.getElementById("min-max-chart").getContext("2d");
+	  window.myBar = new Chart(ctx, config3);
     };
 </script>
 
