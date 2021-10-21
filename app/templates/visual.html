@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %} Visual {% endblock %}
+{% load static %}
+
+{% block content %}
+<div class="container" style="padding-bottom: 50px;">
+  <h2>Visual</h2>
+  {% if msg %}
+    <span class="text-success h4">{{ msg }}</span>
+  {% endif %}
+</div>
+
+
+<div id="container" style="width: 75%;">
+  <canvas id="pie-chart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+<script>
+
+    var config = {
+      type: 'pie',
+      data: {
+        datasets: [{
+          data: {{ data|safe }},
+          backgroundColor: ["#0074D9", "#FF4136", "#2ECC40", "#FF851B", "#7FDBFF", "#B10DC9", "#FFDC00", "#001f3f", "#39CCCC", "#01FF70", "#85144b", "#F012BE", "#3D9970", "#111111", "#AAAAAA"],
+		  
+          label: 'ship_type'
+        }],
+        labels: {{ labels|safe }}
+      },
+      options: {
+        responsive: true
+      }
+    };
+
+    window.onload = function() {
+      var ctx = document.getElementById('pie-chart').getContext('2d');
+      window.myPie = new Chart(ctx, config);
+    };
+</script>
+
+{% endblock %}
