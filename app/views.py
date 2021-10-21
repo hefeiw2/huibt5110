@@ -110,20 +110,28 @@ def aggregation(request, page=1):
     }
     return render(request, 'aggregation.html', context)
 
+
 def visual(request, page=1):
     """Shows the visual page"""
     with connections['default'].cursor() as cursor:
         cursor.execute('SELECT ship_type, COUNT(DISTINCT(imo, ship_name)), MIN(technical_efficiency_number), AVG(technical_efficiency_number), MAX(technical_efficiency_number) FROM co2emission_reduced GROUP BY ship_type ORDER BY COUNT DESC')
         rows = namedtuplefetchall(cursor)
         
-    data = [row.count for row in rows]
     labels = [row.ship_type for row in rows]
+    count = [row.count for row in rows]
+    min_avg = [[row.min, row.avg] for row in rows]
+    avg_max = [[row.avg, row.max] for row in rows]
     
     context = {
         'labels': labels,
-        'data': data,
+        'count': count,
+        'min_avg': min_avg,
+        'avg_max': avg_max
     }
+    print(min_avg)
+    print(avg_max)
     return render(request, 'visual.html', context)
+
 
 
 def insert_update_values(form, post, action, imo):
