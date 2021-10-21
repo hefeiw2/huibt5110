@@ -110,6 +110,22 @@ def aggregation(request, page=1):
     }
     return render(request, 'aggregation.html', context)
 
+def visual(request, page=1):
+    with connections['default'].cursor() as cursor:
+        cursor.execute('SELECT ship_type, COUNT(DISTINCT(imo, ship_name)), MIN(technical_efficiency_number), AVG(technical_efficiency_number), MAX(technical_efficiency_number) FROM co2emission_reduced GROUP BY ship_type ORDER BY COUNT DESC')
+       
+     rows = namedtuplefetchall(cursor)
+        
+    data = [row.count for row in rows]
+    labels = [row.ship_type for row in rows]
+    
+    context = {
+        'labels': labels,
+        'data': data,
+    }
+    return render(request, 'visual.html', context)
+
+
 def insert_update_values(form, post, action, imo):
     """
     Inserts or updates database based on values in form and action to take,
