@@ -17,13 +17,14 @@ COLUMNS = [
     'expiry_date'
 ]
 
-COLUMNS2 = [
+COLUMNSNEW = [
     'ship_type',
-    'count',
-    'min',
-    'avg',
-    'max'
+    'number_ships',
+    'minimum_eedi',
+    'average_eedi',
+    'maximum_eedi'
 ]
+
 
 def index(request):
     """Shows the main page"""
@@ -79,37 +80,32 @@ def emissions(request, page=1):
     return render(request, 'emissions.html', context)
 
 def aggregation(request, page=1):
-    """Shows the aggregation table page"""
+    """Shows the emissions aggregation table page"""
     msg = None
     order_by = request.GET.get('order_by', '')
-    order_by = order_by if order_by in COLUMNS2 else 'count'
+    order_by = order_by if order_by in COLUMNSNEW else 'ship_type'
 
     with connections['default'].cursor() as cursor:
-        cursor.execute('SELECT ship_type, COUNT(DISTINCT(imo, ship_name)), MIN(technical_efficiency_number), AVG(technical_efficiency_number), MAX(technical_efficiency_number) FROM co2emission_reduced GROUP BY ship_type')
+        cursor.execute('SELECT COUNT(*) FROM aggregation')
         count = cursor.fetchone()[0]
         num_pages = (count - 1) // PAGE_SIZE + 1
         page = clamp(page, 1, num_pages)
 
         offset = (page - 1) * PAGE_SIZE
         cursor.execute(f'''
-            SELECT {", ".join(COLUMNS2)}
-            FROM (SELECT ship_type, COUNT(DISTINCT(imo, ship_name)), MIN(technical_efficiency_number), AVG(technical_efficiency_number), MAX(technical_efficiency_number) FROM co2emission_reduced GROUP BY ship_type) AS a
-            ORDER BY {order_by} DESC
+            SELECT {", ".join(COLUMNSNEW)}
+            FROM aggregation
+            ORDER BY {order_by}
             OFFSET %s
             LIMIT %s
         ''', [offset, PAGE_SIZE])
         rows = namedtuplefetchall(cursor)
-  
-imo_deleted = request.GET.get('deleted', False)
-    if imo_deleted:
-        msg = f'✔ IMO {imo_deleted} deleted'
 
     context = {
         'nbar': 'aggregation',
         'page': page,
         'rows': rows,
         'num_pages': num_pages,
-        'msg': msg,
         'order_by': order_by
     }
     return render(request, 'aggregation.html', context)
