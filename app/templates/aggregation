@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %} Aggregation {% endblock %}
+{% load static %}
+
+{% block content %}
+<div class="container" style="padding-bottom: 50px;">
+  <h2>Aggregation</h2>
+  {% if msg %}
+    <span class="text-success h4">{{ msg }}</span>
+  {% endif %}
+  <div class="table-responsive">
+    <table class="table table-hover table-striped">
+      <thead>
+        <tr>
+          <th class="ordering" onclick="window.location='/aggregation/?order_by=ship_type'">Ship Type</th>
+          <th class="ordering" onclick="window.location='/aggregation/?order_by=count'">Count</th>
+		  <th class="ordering" onclick="window.location='/aggregation/?order_by=min'">Minimum EEDI</th>
+		  <th class="ordering" onclick="window.location='/aggregation/?order_by=avg'">Maximum EEDI</th>
+		  <th class="ordering" onclick="window.location='/aggregation/?order_by=max">Average EEDI</th>
+		</tr>
+      </thead>
+      {% for row in rows %}
+        <tr style="cursor:pointer;" onclick="window.location='/aggregate/imo/{{ row.imo }}'">
+          {% for val in row %}
+          <td>{{ val|default:'0' }}</td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+{% endblock %}
