@@ -10,7 +10,7 @@ def parse_eedi(s):
     pass
 
 
-workbook = load_workbook(filename = 'Book3.xlsx')
+workbook = load_workbook('Book3.xlsx')
 
 sheet_name = workbook.sheetnames[0]
 sheet = workbook[sheet_name]
