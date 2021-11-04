@@ -10,9 +10,7 @@ def parse_eedi(s):
     pass
 
 
-workbook = load_workbook(r'C:\Users\Administrator\Documents\WeChat '
-                         r'Files\wxid_c1iqy1sb51ea22\FileStorage\File\2021-11\huibt5110-main\Book3.xlsx')
-
+workbook = oad_workbook(filename = 'Book3.xlsx')
 sheet_name = workbook.sheetnames[0]
 sheet = workbook[sheet_name]
 gen = sheet.rows
